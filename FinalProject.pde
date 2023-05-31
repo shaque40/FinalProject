@@ -8,8 +8,7 @@ float laneY1, laneY2, laneY3, laneY4;  // Y position of each lane
 color roadColor;  // Color of the road
 int lastColorChange;  // Time of the last color change
 
-float carX;  // X position of the car
-float carY;  // Y position of the car
+PVector carPosition;  // Position of the car
 float carSpeed = 5;  // Speed of the car
 
 void setup() {
@@ -25,8 +24,7 @@ void setup() {
   roadColor = color(100);
   lastColorChange = millis();
   
-  carX = width / 2;
-  carY = height - roadHeight / 2 - carImage.height / 2;
+  carPosition = new PVector(width / 2, height - roadHeight / 2 - carImage.height / 2);
 }
 
 void draw() {
@@ -44,7 +42,6 @@ void draw() {
   rect(width/2 - roadHeight/2, 0, roadHeight, height);
   
   // Draw moving lanes
-
   fill(255, 204, 0);
   rect(width/2 - laneWidth/2, laneY1, laneWidth, laneWidth);
   rect(width/2 - laneWidth/2, laneY2, laneWidth, laneWidth);
@@ -72,22 +69,22 @@ void draw() {
   }
   
   // Draw the car
-  image(carImage, carX, carY);
+  image(carImage, carPosition.x, carPosition.y);
 }
 
 void keyPressed() {
   // Move the car left or right with arrow keys
   if (keyCode == LEFT) {
-    carX -= carSpeed;
+    carPosition.x -= carSpeed;
     // Ensure the car stays within the left boundary of the road
-    if (carX < width / 2 - roadHeight / 2 + laneWidth / 2) {
-      carX = width / 2 - roadHeight / 2 + laneWidth / 2;
+    if (carPosition.x < width / 2 - roadHeight / 2 + laneWidth / 2) {
+      carPosition.x = width / 2 - roadHeight / 2 + laneWidth / 2;
     }
   } else if (keyCode == RIGHT) {
-    carX += carSpeed;
+    carPosition.x += carSpeed;
     // Ensure the car stays within the right boundary of the road
-    if (carX > width / 2 + roadHeight / 2 - carImage.width - laneWidth / 2) {
-      carX = width / 2 + roadHeight / 2 - carImage.width - laneWidth / 2;
+    if (carPosition.x > width / 2 + roadHeight / 2 - carImage.width - laneWidth / 2) {
+      carPosition.x = width / 2 + roadHeight / 2 - carImage.width - laneWidth / 2;
     }
   }
 }
@@ -95,4 +92,5 @@ void keyPressed() {
 color generateRandomColor() {
   return color(random(255), random(255), random(255));
 }
+
 
