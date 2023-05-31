@@ -3,55 +3,55 @@
 //YourCar controlCar = new YourCar();
 //BackgroundForProject  currentBackground = new BackgroundForProject();
 
-float roadWidth = 200;  // Width of the main road
-float roadHeight = 50; // Height of the main road
-float laneWidth = 50;   // Width of each lane
-float laneHeight = 10;  // Height of each lane
-float laneSpeed = 2;    // Speed of the moving lanes
+PImage carImage;  // Top view image of the car
+float roadHeight = 600;  // Height of the road
+float laneWidth = 40;   // Width of each lane
+float laneSpeed = 50;     // Speed of the moving lanes
 
-float laneX1, laneX2, laneX3, laneX4;  // X position of each lane
+float laneY1, laneY2, laneY3, laneY4;  // Y position of each lane
 
 void setup() {
-  size(800, 400);
+  size(1000, 1000);
   
-  laneX1 = -laneWidth;
-  laneX2 = 0;
-  laneX3 = width;
-  laneX4 = width + laneWidth;
+  //carImage = loadImage("car.png");  // Replace with the path to your car image
+  
+  laneY1 = -laneWidth;
+  laneY2 = 0;
+  laneY3 = height;
+  laneY4 = height + laneWidth;
 }
 
 void draw() {
-  background(255);
+  background(0,255,0);
   
   // Draw main road
   fill(100);
-  rect(0, height/2 - roadHeight/2, width, roadHeight);
+  rect(width/2 - roadHeight/2, 0, roadHeight, height);
   
   // Draw moving lanes
-  fill(200);
-  rect(laneX1, height/2 - laneHeight/2, laneWidth, laneHeight);
-  rect(laneX2, height/2 - laneHeight/2, laneWidth, laneHeight);
-  rect(laneX3, height/2 - laneHeight/2, laneWidth, laneHeight);
-  rect(laneX4, height/2 - laneHeight/2, laneWidth, laneHeight);
+  fill(255, 204, 0);
+  rect(width/2 - laneWidth/2, laneY1, laneWidth, laneWidth);
+  rect(width/2 - laneWidth/2, laneY2, laneWidth, laneWidth);
+  rect(width/2 - laneWidth/2, laneY3, laneWidth, laneWidth);
+  rect(width/2 - laneWidth/2, laneY4, laneWidth, laneWidth);
   
   // Update lane positions
-  laneX1 += laneSpeed;
-  laneX2 += laneSpeed;
-  laneX3 -= laneSpeed;
-  laneX4 -= laneSpeed;
+  laneY1 -= laneSpeed;
+  laneY2 -= laneSpeed;
+  laneY3 -= laneSpeed;
+  laneY4 -= laneSpeed;
   
   // Wrap around the moving lanes
-  if (laneX1 > width + laneWidth) {
-    laneX1 = -laneWidth;
+  if (laneY1 > height + laneWidth) {
+    laneY1 = -laneWidth;
   }
-  if (laneX2 > width + laneWidth) {
-    laneX2 = -laneWidth;
+  if (laneY2 > height + laneWidth) {
+    laneY2 = -laneWidth;
   }
-  if (laneX3 < -laneWidth) {
-    laneX3 = width;
+  if (laneY3 < -laneWidth) {
+    laneY3 = height;
   }
-  if (laneX4 < -laneWidth) {
-    laneX4 = width;
+  if (laneY4 < -laneWidth) {
+    laneY4 = height;
   }
 }
-
