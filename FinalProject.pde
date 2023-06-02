@@ -1,7 +1,8 @@
 PImage carImage;  // Top view image of the car
+PImage obstacleImage;  // Image of the obstacle car
 float roadHeight = 600;  // Height of the road
 float laneWidth = 40;   // Width of each lane
-float laneSpeed = 50;     // Speed of the moving lanes
+float laneSpeed = 5;     // Speed of the moving lanes
 
 float laneY1, laneY2, laneY3, laneY4;  // Y position of each lane
 
@@ -11,10 +12,13 @@ int lastColorChange;  // Time of the last color change
 PVector carPosition;  // Position of the car
 float carSpeed = 5;  // Speed of the car
 
+ArrayList<PVector> obstaclePositions;  // Positions of the obstacle cars
+
 void setup() {
   size(1000, 1000);
   
   carImage = loadImage("PlayerCar.png");
+  obstacleImage = loadImage("ObstacleCar.png");
   
   laneY1 = -laneWidth;
   laneY2 = 0;
@@ -25,6 +29,8 @@ void setup() {
   lastColorChange = millis();
   
   carPosition = new PVector(width / 2, height - roadHeight / 2 - carImage.height / 2);
+  
+  obstaclePositions = new ArrayList<PVector>();
 }
 
 void draw() {
@@ -37,7 +43,7 @@ void draw() {
   }
   
   // Draw main road with the updated color
-  background(lastColorChange);
+  background(roadColor);
   fill(0);
   rect(width/2 - roadHeight/2, 0, roadHeight, height);
   
@@ -68,6 +74,41 @@ void draw() {
     laneY4 = height;
   }
   
+  // Generate new obstacle cars randomly
+  if (random(1) < 0.01) {  // Adjust the probability as needed
+    float obstacleX = random(width / 2 - roadHeight / 2 + laneWidth / 2, width / 2 + roadHeight / 2 - laneWidth / 2 - obstacleImage.width);
+    PVector obstaclePosition = new PVector(obstacleX, -obstacleImage.height);
+    
+    // Check for overlap with existing obstacle cars
+    boolean overlap = false;
+    for (PVector pos : obstaclePositions) {
+      if (dist(obstaclePosition.x, obstaclePosition.y, pos.x, pos.y) < obstacleImage.width) {
+        overlap = true;
+        break;
+      }
+    }
+    
+    // Add the obstacle car to the list if no overlap
+    if (!overlap) {
+      obstaclePositions.add(obstaclePosition);
+    }
+  }
+  
+  // Update obstacle car positions and remove off-screen obstacle cars
+  for (int i = obstaclePositions.size() - 1; i >= 0; i--) {
+    PVector obstaclePosition = obstaclePositions.get(i);
+    obstaclePosition.y += laneSpeed;
+    
+    if (obstaclePosition.y > height) {
+      obstaclePositions.remove(i);
+    }
+  }
+  
+  // Draw obstacle cars
+  for (PVector obstaclePosition : obstaclePositions) {
+    image(obstacleImage, obstaclePosition.x, obstaclePosition.y);
+  }
+  
   // Draw the car
   image(carImage, carPosition.x, carPosition.y);
 }
@@ -92,5 +133,3 @@ void keyPressed() {
 color generateRandomColor() {
   return color(random(255), random(255), random(255));
 }
-
-
