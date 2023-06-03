@@ -12,7 +12,7 @@ int lastColorChange;  // Time of the last color change
 PVector carPosition;  // Position of the car
 float carSpeed = 5;  // Speed of the car
 
-ArrayList<PVector> obstaclePositions;  // Positions of the obstacle cars
+ArrayList<PVector> obstaclePositions;   // Positions of the obstacle cars
 
 void setup() {
   size(1000, 1000);
